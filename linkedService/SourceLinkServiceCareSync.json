@@ -1,0 +1,11 @@
+{
+	"name": "SourceLinkServiceCareSync",
+	"properties": {
+		"description": "Get source from ADLS",
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://dstoragexcaresyncxprj.dfs.core.windows.net/"
+		}
+	}
+}
