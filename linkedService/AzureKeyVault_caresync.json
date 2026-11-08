@@ -1,0 +1,10 @@
+{
+	"name": "AzureKeyVault_caresync",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://caresync-pswrd.vault.azure.net/"
+		}
+	}
+}
