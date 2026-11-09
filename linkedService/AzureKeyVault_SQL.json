@@ -1,0 +1,10 @@
+{
+	"name": "AzureKeyVault_SQL",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://sqlxkeyvault.vault.azure.net/"
+		}
+	}
+}
