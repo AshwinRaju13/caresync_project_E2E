@@ -51,7 +51,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"landing": "raw-layer",
-							"folder": "hospitals"
+							"folder": "test"
 						}
 					}
 				]
