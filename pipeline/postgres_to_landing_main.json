@@ -1,5 +1,5 @@
 {
-	"name": "postgres_to_landing",
+	"name": "postgres_to_landing_main",
 	"properties": {
 		"activities": [
 			{
@@ -50,7 +50,7 @@
 					},
 					"activities": [
 						{
-							"name": "test",
+							"name": "table variable",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"policy": {
