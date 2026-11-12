@@ -18,7 +18,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select table_id from ctrl.table_config where is_active= '@{pipeline().parameters.is_active}' and source_system = '@{pipeline().parameters.source_system}'",
+							"value": "select table_id from ctrl.table_config where is_active= '1' and source_system = '@{pipeline().parameters.source_system}'",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -50,20 +50,101 @@
 					},
 					"activities": [
 						{
-							"name": "table variable",
-							"type": "SetVariable",
-							"dependsOn": [],
+							"name": "source to silver layer",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Insert progress status",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
-								"secureOutput": false,
 								"secureInput": false
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "test_variable",
-								"value": {
-									"value": "@string(item().table_id)",
-									"type": "Expression"
+								"pipeline": {
+									"referenceName": "pipeline_to_silver_inner",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"table_var": {
+										"value": "@item().table_id",
+										"type": "Expression"
+									},
+									"adf_run_id": {
+										"value": "@item().adf_run_id",
+										"type": "Expression"
+									}
 								}
+							}
+						},
+						{
+							"name": "Insert progress status",
+							"type": "Script",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 2,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "sqldb_audit",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "Query",
+										"text": {
+											"value": "INSERT INTO ctrl.audit_log (adf_run_id,table_id,stage,status,start_time)\nVALUES ('@{pipeline().parameters.adf_run_id}',@{item().table_id},'SOURCE_TO_SILVER','in_progress', SYSUTCDATETIME())",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						},
+						{
+							"name": "Update if Failed",
+							"type": "Script",
+							"dependsOn": [
+								{
+									"activity": "source to silver layer",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "sqldb_audit",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "Query",
+										"text": {
+											"value": "UPDATE ctrl.audit_log\nSET status='FAILED', end_time= SYSUTCDATETIME()\nWHERE adf_run_id= '@{pipeline().parameters.adf_run_id}' and table_id=@{item().table_id};",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
 							}
 						}
 					]
@@ -75,9 +156,9 @@
 				"type": "string",
 				"defaultValue": "neon_postgres"
 			},
-			"is_active": {
+			"adf_run_id": {
 				"type": "string",
-				"defaultValue": "1"
+				"defaultValue": "a2"
 			}
 		},
 		"variables": {
