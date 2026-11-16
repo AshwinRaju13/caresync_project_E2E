@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-caresync-project-e2e"
+		},
+		"Dstorage_caresync_accountKey": {
+			"value": ""
+		},
+		"AzureDatabricks_caresync_properties_typeProperties_existingClusterId": {
+			"value": "1110-094648-o9otodqz"
+		},
+		"AzureKeyVault_SQL_properties_typeProperties_baseUrl": {
+			"value": "https://sqlxkeyvault.vault.azure.net/"
+		},
+		"AzureKeyVault_caresync_properties_typeProperties_baseUrl": {
+			"value": "https://caresync-pswrd.vault.azure.net/"
+		},
+		"Dstorage_caresync_properties_typeProperties_url": {
+			"value": "https://dstoragexcaresyncxprj.dfs.core.windows.net/"
+		},
+		"PostgreSource_caresync_properties_typeProperties_server": {
+			"value": "ep-mute-pine-a1ygo6m7-pooler.ap-southeast-1.aws.neon.tech"
+		},
+		"PostgreSource_caresync_properties_typeProperties_database": {
+			"value": "neondb"
+		},
+		"PostgreSource_caresync_properties_typeProperties_username": {
+			"value": "neondb_owner"
+		},
+		"SourceLinkServiceCareSync_properties_typeProperties_url": {
+			"value": "https://dstoragexcaresyncxprj.dfs.core.windows.net/"
+		},
+		"sqldb_audit_properties_typeProperties_server": {
+			"value": "caresync-servername.database.windows.net"
+		},
+		"sqldb_audit_properties_typeProperties_database": {
+			"value": "caresync-database"
+		},
+		"sqldb_audit_properties_typeProperties_userName": {
+			"value": "caresync"
+		}
+	}
+}
