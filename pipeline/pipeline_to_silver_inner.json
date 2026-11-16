@@ -308,7 +308,7 @@
 							"typeProperties": {
 								"variableName": "watermark_value",
 								"value": {
-									"value": "@activity('Watermark').output",
+									"value": "@string(activity('Watermark').output)",
 									"type": "Expression"
 								}
 							}
